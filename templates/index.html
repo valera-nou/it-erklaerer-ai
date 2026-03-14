@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mein KI Erklärer</title>
+    <style>
+    
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #f0f2f5; 
+        color: #1c1e21;
+        max-width: 700px; 
+        margin: 60px auto; 
+        padding: 20px;
+    }
+
+    h1 { color: #1a73e8; text-align: center; margin-bottom: 30px; }
+
+    
+    .input-group {
+        display: flex;
+        gap: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    input { 
+        flex: 1;
+        padding: 12px; 
+        border: 2px solid #e0e0e0; 
+        border-radius: 8px;
+        outline: none;
+        font-size: 16px;
+    }
+
+    input:focus { border-color: #1a73e8; }
+
+    button { 
+        padding: 12px 25px; 
+        background: #1a73e8; 
+        color: white; 
+        border: none; 
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover { background: #1557b0; }
+
+    
+    #ausgabe { 
+        background: white; 
+        padding: 25px; 
+        margin-top: 30px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        display: none; 
+    }
+
+    h3 { color: #1a73e8; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+
+
+    pre { 
+        background: #282c34; 
+        color: #abb2bf; 
+        padding: 20px; 
+        border-radius: 8px; 
+        overflow-x: auto;
+        font-family: 'Consolas', monospace;
+        line-height: 1.5;
+    }
+</style>
+</head>
+<body>
+
+    <h1>IT-Erklärer</h1>
+    
+    <input type="text" id="begriff" placeholder="Was soll ich erklären?">
+    <button onclick="sendeDaten()">Frag die KI</button>
+
+    <div id="ausgabe" style="display:none;">
+        <h3>Erklärung:</h3>
+        <p id="text"></p>
+        
+        <h3>Code:</h3>
+        <pre id="code"></pre>
+    </div>
+
+    <script>
+        async function sendeDaten() {
+            
+            const wort = document.getElementById('begriff').value;
+
+            
+            const antwort = await fetch('/erklaere', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "begriff": wort })
+            });
+
+            
+            const daten = await antwort.json();
+
+            
+            document.getElementById('text').innerText = daten.erklaerung;
+            document.getElementById('code').innerText = daten.code_beispiel;
+            
+            
+            document.getElementById('ausgabe').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
