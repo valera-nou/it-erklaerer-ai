@@ -2,6 +2,7 @@ import os
 from openai import OpenAI
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -43,7 +44,7 @@ Antworte NUR mit dem JSON-Objekt, ohne weiteren Text oder Markdown-Blöcke."""
             temperature=0.5,
             response_format={"type": "json_object"}
         )
-        import json
+        
         result = json.loads(response.choices[0].message.content)
     except Exception as e:
         
@@ -52,7 +53,7 @@ Antworte NUR mit dem JSON-Objekt, ohne weiteren Text oder Markdown-Blöcke."""
             "details": str(e)
         }
 
-    import json
+
     result = json.loads(response.choices[0].message.content)
     return jsonify(result)
 
